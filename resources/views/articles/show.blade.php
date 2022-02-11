@@ -15,6 +15,16 @@
             <div class="card-body">
                 <p class="card-text">{{ $article->content }}</p>
             </div>
+            <div class="card-footer d-flex justify-content-between">
+                <small>Likes: {{ $article->likes->count() }}</small>
+                @auth
+                    @if ($article->likes->pluck('user_id')->contains(auth()->id()))                                     {{-- TODO: Костыль --}}
+                        <a class="btn btn-outline-danger" href="{{ route('articles.likes.destroy', [$article, $article->likes->where('user_id', auth()->id())->first()->id]) }}" data-method="DELETE" rel="nofollow">Dislike</a>
+                    @else
+                        <a class="btn btn-outline-primary" href="{{ route('articles.likes.store', $article) }}" data-method="POST" rel="nofollow">I like</a>
+                    @endif
+                @endauth
+            </div>
         </div>
         <h2>Comments</h2>
         @forelse ($article->comments as $comment)
@@ -35,20 +45,22 @@
                 </div>
             </div>
         @endforelse
-        <div class="col-lg-7">
-            <form class="border border-white rounded p-3 bg-white" action="{{ route('articles.comments.store', $article) }}" method="POST">
-                @csrf
-                <div class="form-group pb-3">
-                    <label for="comment"><strong>Comment</strong></label>
-                    <textarea class="form-control" name="content" id="comment" cols="30" rows="6">{{ old('content') }}</textarea>
-                </div>
-                @error('content')
-                    <div class="alert alert-warning py-1" role="alert">
-                        {{ $message }}
+        @auth
+            <div class="col-lg-7">
+                <form class="border border-white rounded p-3 bg-white" action="{{ route('articles.comments.store', $article) }}" method="POST">
+                    @csrf
+                    <div class="form-group pb-3">
+                        <label for="comment"><strong>Comment</strong></label>
+                        <textarea class="form-control" name="content" id="comment" cols="30" rows="6">{{ old('content') }}</textarea>
                     </div>
-                @enderror
-                <button class="btn btn-outline-primary" type="submit">Create</button>
-            </form>
-        </div>
+                    @error('content')
+                        <div class="alert alert-warning py-1" role="alert">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                    <button class="btn btn-outline-primary" type="submit">Create</button>
+                </form>
+            </div>
+        @endauth
     </div>
 @endsection

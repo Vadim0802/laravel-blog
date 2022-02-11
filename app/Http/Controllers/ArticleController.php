@@ -59,7 +59,7 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        $article->load(['comments', 'user']);
+        $article->load(['comments', 'user', 'likes']);
 
         return view('articles.show', compact('article'));
     }

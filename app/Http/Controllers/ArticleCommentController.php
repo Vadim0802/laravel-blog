@@ -23,7 +23,8 @@ class ArticleCommentController extends Controller
 
         $comment = new ArticleComment($data);
         $comment->user()->associate(auth()->user());
-        $article->comments()->save($comment);
+        $comment->article()->associate($article);
+        $comment->save();
 
         return redirect()
             ->route('articles.show', $article)
