@@ -7,7 +7,7 @@ use App\Models\ArticleLike;
 
 class StoreArticleLikeAction
 {
-    public function handle(Article $article): ArticleLike
+    public function handle(Article $article)
     {
         if ($article->likes->pluck('user_id')->contains(auth()->id())) {
             return false;

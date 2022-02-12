@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateArticleRequest;
 use App\Models\Article;
+use App\Actions\StoreArticleAction;
+use App\Http\Requests\StoreArticleRequest;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -35,18 +38,9 @@ class ArticleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreArticleRequest $request, StoreArticleAction $action)
     {
-        $this->authorize('create', Article::class);
-
-        $data = $request->validate([
-            'title' => 'required|min:10|max:100',
-            'content' => 'required|min:100|max:1000'
-        ]);
-
-        $article = new Article($data);
-        $article->user()->associate(auth()->user());
-        $article->save();
+        $action->handle($request->validated());
 
         return redirect()
             ->route('articles.index')
@@ -57,7 +51,7 @@ class ArticleController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function show(Article $article)
     {
@@ -70,7 +64,7 @@ class ArticleController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function edit(Article $article)
     {
@@ -82,18 +76,22 @@ class ArticleController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Article $article)
+    public function update(UpdateArticleRequest $request, Article $article)
     {
-        abort_if($this->authorize('update', $article), 403);
+        $article->update($request->validated());
+
+        return redirect()
+            ->route('articles.show', $article)
+            ->with('success', 'The article has been successfully updated!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Article $article)
     {

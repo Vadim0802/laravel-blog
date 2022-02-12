@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\StoreArticleCommentAction;
+use App\Http\Requests\StoreArticleCommentRequest;
 use App\Models\Article;
 use App\Models\ArticleComment;
 use Illuminate\Http\Request;
@@ -13,18 +15,11 @@ class ArticleCommentController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request, Article $article)
+    public function store(StoreArticleCommentRequest $request, Article $article, StoreArticleCommentAction $action)
     {
-        $data = $request->validate([
-            'content' => 'required|max:255'
-        ]);
-
-        $comment = new ArticleComment($data);
-        $comment->user()->associate(auth()->user());
-        $comment->article()->associate($article);
-        $comment->save();
+        $action->handle($request->validated(), $article);
 
         return redirect()
             ->route('articles.show', $article)
