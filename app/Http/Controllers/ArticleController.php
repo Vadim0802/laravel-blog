@@ -37,6 +37,8 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Article::class);
+
         $data = $request->validate([
             'title' => 'required|min:10|max:100',
             'content' => 'required|min:100|max:1000'
@@ -72,7 +74,7 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        //
+        return view('articles.edit', compact('article'));
     }
 
     /**
@@ -84,7 +86,7 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        //
+        abort_if($this->authorize('update', $article), 403);
     }
 
     /**
@@ -95,6 +97,8 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        //
+        $article->delete();
+
+        return redirect()->route('articles.index')->with('success', 'Article deleted successfully!');
     }
 }

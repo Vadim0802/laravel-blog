@@ -6,10 +6,10 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between">
                     <h2>{{ $article->title }}</h2>
-                    @canany(['update', 'delete'], $article)                        
+                    @canany(['update', 'delete'], $article)            
                         <div>
-                            <a href="">Edit</a>
-                            <a href="">Delete</a>
+                            <a href="{{ route('articles.edit', $article) }}">Edit</a>
+                            <a href="{{ route('articles.destroy', $article) }}" data-method="delete" data-confirm="You sure?">Delete</a>
                         </div>
                     @endcanany
                 </div>
