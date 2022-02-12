@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\StoreArticleLikeAction;
 use App\Models\Article;
 use App\Models\ArticleLike;
-use Illuminate\Http\Request;
 
 class ArticleLikeController extends Controller
 {
@@ -16,74 +16,23 @@ class ArticleLikeController extends Controller
      */
     public function index(Article $article)
     {
-        //
-    }
+        $likes = $article->likes()->orderBy('id', 'desc')->paginate(10);
+        $likes->load('user');
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Article $article)
-    {
-        //
+        return view('article_likes.index', compact('likes'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Article $article)
+    public function store(Article $article, StoreArticleLikeAction $action)
     {
-        if (! $article->likes->pluck('user_id')->contains(auth()->id())) {
-            $like = new ArticleLike();
-            $like->user()->associate(auth()->user());
-            $like->article()->associate($article);
-            $like->save();
-        }
+        $action->handle($article);
 
         return redirect()->route('articles.show', $article);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Article  $article
-     * @param  \App\Models\ArticleLike  $like
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Article $article, ArticleLike $like)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Article  $article
-     * @param  \App\Models\ArticleLike  $like
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Article $article, ArticleLike $like)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Article  $article
-     * @param  \App\Models\ArticleLike  $like
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Article $article, ArticleLike $like)
-    {
-        //
     }
 
     /**
@@ -97,7 +46,6 @@ class ArticleLikeController extends Controller
     {
         $like->delete();
 
-        return redirect()
-            ->route('articles.show', $article);
+        return redirect()->route('articles.show', $article);
     }
 }

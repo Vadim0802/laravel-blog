@@ -4,7 +4,15 @@
     <div class="col-lg-8 mx-auto d-grid gap-3">
         <div class="card">
             <div class="card-header">
-                <h2>{{ $article->title }}</h2>
+                <div class="d-flex justify-content-between">
+                    <h2>{{ $article->title }}</h2>
+                    @canany(['update', 'delete'], $article)                        
+                        <div>
+                            <a href="">Edit</a>
+                            <a href="">Delete</a>
+                        </div>
+                    @endcanany
+                </div>
                 <div class="text-end">
                     <small>Author: {{ $article->user->name }}</small>
                 </div>
@@ -16,10 +24,10 @@
                 <p class="card-text">{{ $article->content }}</p>
             </div>
             <div class="card-footer d-flex justify-content-between">
-                <small>Likes: {{ $article->likes->count() }}</small>
+                <small><a href="{{ route('articles.likes.index', $article) }}">Likes: {{ $article->likes->count() }}</a></small>
                 @auth
-                    @if ($article->likes->pluck('user_id')->contains(auth()->id()))                                     {{-- TODO: Костыль --}}
-                        <a class="btn btn-outline-danger" href="{{ route('articles.likes.destroy', [$article, $article->likes->where('user_id', auth()->id())->first()->id]) }}" data-method="DELETE" rel="nofollow">Dislike</a>
+                    @if ($article->likes->pluck('user_id')->contains(auth()->id()))
+                        <a class="btn btn-outline-danger" href="{{ route('articles.likes.destroy', [$article, $article->likes()->firstWhere('user_id', auth()->id())]) }}" data-method="DELETE" rel="nofollow">Dislike</a>
                     @else
                         <a class="btn btn-outline-primary" href="{{ route('articles.likes.store', $article) }}" data-method="POST" rel="nofollow">I like</a>
                     @endif
