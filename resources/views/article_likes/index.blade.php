@@ -7,5 +7,8 @@
                 <li class="list-group-item">{{ $like->user->name }}</li>
             @endforeach
         </ul>
+        <div class="my-3">
+            {{ $likes->links() }}
+        </div>
     </div>
 @endsection
