@@ -12,12 +12,11 @@ class ArticleLikeController extends Controller
      * Display a listing of the resource.
      *
      * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index(Article $article)
     {
         $likes = $article->likes()->orderBy('id', 'desc')->paginate(10);
-        $likes->load('user');
 
         return view('article_likes.index', compact('likes'));
     }
@@ -26,7 +25,7 @@ class ArticleLikeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Article $article, StoreArticleLikeAction $action)
     {
@@ -40,7 +39,7 @@ class ArticleLikeController extends Controller
      *
      * @param  \App\Models\Article  $article
      * @param  \App\Models\ArticleLike  $like
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Article $article, ArticleLike $like)
     {

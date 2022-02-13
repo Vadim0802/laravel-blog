@@ -13,4 +13,4 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::resource('articles', ArticleController::class);
 Route::resource('articles.likes', ArticleLikeController::class)->only('index', 'store', 'destroy');
-Route::resource('articles.comments', ArticleCommentController::class)->except('index', 'create');
+Route::resource('articles.comments', ArticleCommentController::class)->only('store', 'edit', 'update', 'destroy');

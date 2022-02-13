@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Actions\StoreArticleCommentAction;
 use App\Http\Requests\StoreArticleCommentRequest;
+use App\Http\Requests\UpdateArticleCommentRequest;
 use App\Models\Article;
 use App\Models\ArticleComment;
-use Illuminate\Http\Request;
 
 class ArticleCommentController extends Controller
 {
@@ -21,21 +21,7 @@ class ArticleCommentController extends Controller
     {
         $action->handle($request->validated(), $article);
 
-        return redirect()
-            ->route('articles.show', $article)
-            ->with('success', 'Comment successfully created!');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Article  $article
-     * @param  \App\Models\ArticleComment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Article $article, ArticleComment $comment)
-    {
-        //
+        return redirect()->route('articles.show', $article)->with('success', 'Comment successfully created!');
     }
 
     /**
@@ -43,11 +29,11 @@ class ArticleCommentController extends Controller
      *
      * @param  \App\Models\Article  $article
      * @param  \App\Models\ArticleComment  $comment
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function edit(Article $article, ArticleComment $comment)
     {
-        //
+        return view('article_comments.edit', compact('article', 'comment'));
     }
 
     /**
@@ -56,11 +42,13 @@ class ArticleCommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Article  $article
      * @param  \App\Models\ArticleComment  $comment
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Article $article, ArticleComment $comment)
+    public function update(UpdateArticleCommentRequest $request, Article $article, ArticleComment $comment)
     {
-        //
+        $comment->update($request->validated());
+
+        return redirect()->route('articles.show', $article)->with('success', 'Your comment successfully updated!');
     }
 
     /**
@@ -68,10 +56,12 @@ class ArticleCommentController extends Controller
      *
      * @param  \App\Models\Article  $article
      * @param  \App\Models\ArticleComment  $comment
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Article $article, ArticleComment $comment)
     {
-        //
+        $comment->delete();
+
+        return redirect()->route('articles.show', $article)->with('success', 'Your comment successfully deleted!');
     }
 }

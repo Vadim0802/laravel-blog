@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\ArticleComment;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreArticleCommentRequest extends FormRequest
+class UpdateArticleCommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +13,7 @@ class StoreArticleCommentRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user() && $this->user()->can('create', ArticleComment::class);
+        return $this->user() && $this->user()->can('update', $this->comment);
     }
 
     /**

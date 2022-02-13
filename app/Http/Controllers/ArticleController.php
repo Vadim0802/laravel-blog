@@ -17,7 +17,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::orderBy('id', 'desc')->paginate(10)->load('user');
+        $articles = Article::orderBy('id', 'desc')->paginate(10);
 
         return view('articles.index', compact('articles'));
     }
@@ -42,9 +42,7 @@ class ArticleController extends Controller
     {
         $action->handle($request->validated());
 
-        return redirect()
-            ->route('articles.index')
-            ->with('success', 'Article created successfully!');
+        return redirect()->route('articles.index')->with('success', 'Article created successfully!');
     }
 
     /**
@@ -82,8 +80,7 @@ class ArticleController extends Controller
     {
         $article->update($request->validated());
 
-        return redirect()
-            ->route('articles.show', $article)
+        return redirect()->route('articles.show', $article)
             ->with('success', 'The article has been successfully updated!');
     }
 

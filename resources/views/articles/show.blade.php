@@ -6,7 +6,7 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between">
                     <h2>{{ $article->title }}</h2>
-                    @canany(['update', 'delete'], $article)            
+                    @canany(['update', 'delete'], $article)
                         <div>
                             <a href="{{ route('articles.edit', $article) }}">Edit</a>
                             <a href="{{ route('articles.destroy', $article) }}" data-method="delete" data-confirm="You sure?">Delete</a>
@@ -27,7 +27,7 @@
                 <small><a href="{{ route('articles.likes.index', $article) }}">Likes: {{ $article->likes->count() }}</a></small>
                 @auth
                     @if ($article->likes->pluck('user_id')->contains(auth()->id()))
-                        <a class="btn btn-outline-danger" href="{{ route('articles.likes.destroy', [$article, $article->likes()->firstWhere('user_id', auth()->id())]) }}" data-method="DELETE" rel="nofollow">Dislike</a>
+                        <a class="btn btn-outline-danger" href="{{ route('articles.likes.destroy', [$article, $article->likes->firstWhere('user_id', auth()->id())]) }}" data-method="DELETE" rel="nofollow">Dislike</a>
                     @else
                         <a class="btn btn-outline-primary" href="{{ route('articles.likes.store', $article) }}" data-method="POST" rel="nofollow">I like</a>
                     @endif
@@ -38,7 +38,15 @@
         @forelse ($article->comments as $comment)
             <div class="col-lg-7">
                 <div class="card">
-                    <div class="card-header">{{ $comment->user->name }}</div>
+                    <div class="card-header d-flex justify-content-between">
+                        {{ $comment->user->name }}
+                        @canany(['update', 'delete'], $comment)
+                            <div>
+                                <a href="{{ route('articles.comments.edit', [$article, $comment]) }}">Edit</a>
+                                <a href="{{ route('articles.comments.destroy', [$article, $comment]) }}" data-method="delete" data-confirm="You sure?" rel="nofollow">Delete</a>
+                            </div>
+                        @endcanany
+                    </div>
                     <div class="card-body">
                         <p class="card-text">
                             {{ $comment->content }}
@@ -53,7 +61,7 @@
                 </div>
             </div>
         @endforelse
-        @auth
+        @can('create', \App\Models\ArticleComment::class)
             <div class="col-lg-7">
                 <form class="border border-white rounded p-3 bg-white" action="{{ route('articles.comments.store', $article) }}" method="POST">
                     @csrf
@@ -69,6 +77,6 @@
                     <button class="btn btn-outline-primary" type="submit">Create</button>
                 </form>
             </div>
-        @endauth
+        @endcan
     </div>
 @endsection
