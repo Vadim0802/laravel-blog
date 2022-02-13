@@ -11,5 +11,7 @@ class StoreArticleAction
         $article = new Article($data);
         $article->user()->associate(auth()->user());
         $article->save();
+        
+        return $article;
     }
 }
