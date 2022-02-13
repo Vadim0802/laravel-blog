@@ -6,7 +6,6 @@ use App\Http\Requests\UpdateArticleRequest;
 use App\Models\Article;
 use App\Actions\StoreArticleAction;
 use App\Http\Requests\StoreArticleRequest;
-use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
