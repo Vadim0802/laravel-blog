@@ -29,6 +29,7 @@ class ArticleLikeController extends Controller
      */
     public function store(Article $article, StoreArticleLikeAction $action)
     {
+        $this->authorize('create', ArticleLike::class);
         $action->handle($article);
 
         return redirect()->route('articles.show', $article);
@@ -43,6 +44,7 @@ class ArticleLikeController extends Controller
      */
     public function destroy(Article $article, ArticleLike $like)
     {
+        $this->authorize('delete', $like);
         $like->delete();
 
         return redirect()->route('articles.show', $article);
