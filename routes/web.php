@@ -11,6 +11,11 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::resource('articles', ArticleController::class);
-Route::resource('articles.likes', ArticleLikeController::class)->only('index', 'store', 'destroy');
-Route::resource('articles.comments', ArticleCommentController::class)->only('store', 'edit', 'update', 'destroy');
+Route::resource('articles', ArticleController::class)
+    ->scoped(['article' => 'slug']);
+
+Route::resource('articles.likes', ArticleLikeController::class)->only('index', 'store', 'destroy')
+    ->scoped(['article' => 'slug']);
+
+Route::resource('articles.comments', ArticleCommentController::class)->only('store', 'edit', 'update', 'destroy')
+    ->scoped(['article' => 'slug']);
