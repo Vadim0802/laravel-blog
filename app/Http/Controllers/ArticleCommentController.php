@@ -13,15 +13,16 @@ class ArticleCommentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Article  $article
+     * @param StoreArticleCommentRequest $request
+     * @param \App\Models\Article $article
+     * @param StoreArticleCommentAction $action
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreArticleCommentRequest $request, Article $article, StoreArticleCommentAction $action)
     {
         $action->handle($request->validated(), $article);
 
-        return redirect()->route('articles.show', $article)->with('success', 'Comment successfully created!');
+        return to_route('articles.show', $article)->with('success', 'Comment successfully created!');
     }
 
     /**
@@ -38,7 +39,6 @@ class ArticleCommentController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Article  $article
      * @param  \App\Models\ArticleComment  $comment
@@ -48,7 +48,7 @@ class ArticleCommentController extends Controller
     {
         $comment->update($request->validated());
 
-        return redirect()->route('articles.show', $article)->with('success', 'Your comment successfully updated!');
+        return to_route('articles.show', $article)->with('success', 'Your comment successfully updated!');
     }
 
     /**
@@ -62,6 +62,6 @@ class ArticleCommentController extends Controller
     {
         $comment->delete();
 
-        return redirect()->route('articles.show', $article)->with('success', 'Your comment successfully deleted!');
+        return to_route('articles.show', $article)->with('success', 'Your comment successfully deleted!');
     }
 }

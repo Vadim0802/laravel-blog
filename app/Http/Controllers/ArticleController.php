@@ -41,7 +41,7 @@ class ArticleController extends Controller
     {
         $action->handle($request->validated());
 
-        return redirect()->route('articles.index')->with('success', 'Article created successfully!');
+        return to_route('articles.index')->with('success', 'Article created successfully!');
     }
 
     /**
@@ -79,8 +79,7 @@ class ArticleController extends Controller
     {
         $article->update($request->validated());
 
-        return redirect()->route('articles.show', $article)
-            ->with('success', 'The article has been successfully updated!');
+        return to_route('articles.show', $article)->with('success', 'The article has been successfully updated!');
     }
 
     /**
@@ -93,6 +92,6 @@ class ArticleController extends Controller
     {
         $article->delete();
 
-        return redirect()->route('articles.index')->with('success', 'Article deleted successfully!');
+        return to_route('articles.index')->with('success', 'Article deleted successfully!');
     }
 }

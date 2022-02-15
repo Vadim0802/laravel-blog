@@ -32,7 +32,7 @@ class ArticleLikeController extends Controller
         $this->authorize('create', ArticleLike::class);
         $action->handle($article);
 
-        return redirect()->route('articles.show', $article);
+        return to_route('articles.show', $article);
     }
 
     /**
@@ -47,6 +47,6 @@ class ArticleLikeController extends Controller
         $this->authorize('delete', $like);
         $like->delete();
 
-        return redirect()->route('articles.show', $article);
+        return to_route('articles.show', $article);
     }
 }
