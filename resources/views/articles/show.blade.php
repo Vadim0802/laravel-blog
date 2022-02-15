@@ -4,27 +4,25 @@
     <div class="col-lg-8 mx-auto d-grid gap-3">
         <div class="card">
             <div class="card-header">
-                <div class="d-flex justify-content-between">
-                    <h2>{{ $article->title }}</h2>
-                    @canany(['update', 'delete'], $article)
-                        <div>
-                            <a href="{{ route('articles.edit', $article) }}">Edit</a>
-                            <a href="{{ route('articles.destroy', $article) }}" data-method="delete" data-confirm="You sure?">Delete</a>
-                        </div>
-                    @endcanany
-                </div>
+                <h2>{{ $article->title }}</h2>
                 <div class="text-end">
                     <small>Author: {{ $article->user->name }}</small>
                 </div>
                 <div class="text-end">
                     <small>Created: {{ $article->created_at->format('Y/m/d') }}</small>
                 </div>
+                @canany(['update', 'delete'], $article)
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{{ route('articles.edit', $article) }}">Edit</a>
+                    <a class="link-danger" href="{{ route('articles.destroy', $article) }}" data-method="delete" data-confirm="You sure?">Delete</a>
+                </div>
+                @endcanany
             </div>
             <div class="card-body">
                 <p class="card-text">{{ $article->content }}</p>
             </div>
             <div class="card-footer d-flex justify-content-between">
-                <small><a href="{{ route('articles.likes.index', $article) }}">Likes: {{ $article->likes->count() }}</a></small>
+                <small><a href="{{ route('articles.likes.index', $article) }}">Likes: {{ $article->likes_count }}</a></small>
                 @auth
                     @if ($article->likes->pluck('user_id')->contains(auth()->id()))
                         <a class="btn btn-outline-danger" href="{{ route('articles.likes.destroy', [$article, $article->likes->firstWhere('user_id', auth()->id())]) }}" data-method="DELETE" rel="nofollow">Dislike</a>
