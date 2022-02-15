@@ -46,6 +46,7 @@ class ArticleLikeController extends Controller
     {
         $this->authorize('delete', $like);
         $like->delete();
+        $article->update(['likes_count' => $article->likes_count - 1]);
 
         return to_route('articles.show', $article);
     }

@@ -22,6 +22,7 @@ class ArticleLikeSeeder extends Seeder
         foreach ($users as $user) {
             foreach ($articles as $article) {
                 ArticleLike::create(['user_id' => $user->id, 'article_id' => $article->id]);
+                $article->update(['likes_count' => $article->likes_count + 1]);
             }
         }
     }
