@@ -39,8 +39,8 @@ class Article extends Model
         return $this->hasMany(ArticleLike::class);
     }
 
-    public function scopePopular(Builder $query)
+    public function scopePopular(Builder $query, int $count)
     {
-        return $query->orderBy('likes_count', 'desc')->limit(10);
+        return $query->orderBy('likes_count', 'desc')->limit($count);
     }
 }

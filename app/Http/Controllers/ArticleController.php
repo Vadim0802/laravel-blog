@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateArticleRequest;
 use App\Models\Article;
-use App\Models\ArticleLike;
 use App\Actions\StoreArticleAction;
 use App\Http\Requests\StoreArticleRequest;
 
@@ -18,7 +17,7 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::query()->orderBy('created_at', 'desc')->paginate(10);
-        $popularArticles = Article::popular()->get();
+        $popularArticles = Article::popular(10)->get();
 
         return view('articles.index', compact('articles', 'popularArticles'));
     }
