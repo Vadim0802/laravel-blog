@@ -61,7 +61,7 @@
         @endforelse
         @can('create', \App\Models\ArticleComment::class)
             <div class="col-lg-7">
-                <form class="border border-white rounded p-3 bg-white" action="{{ route('articles.comments.store', $article) }}" method="POST">
+                <form class="border border-white rounded p-3 bg-white shadow-sm" action="{{ route('articles.comments.store', $article) }}" method="POST">
                     @csrf
                     <div class="form-group pb-3">
                         <label for="comment"><strong>Comment</strong></label>

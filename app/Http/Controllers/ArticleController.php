@@ -16,7 +16,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::query()->orderBy('created_at', 'desc')->paginate(10);
+        $articles = Article::query()->with('user')->orderBy('created_at', 'desc')->paginate(10);
         $popularArticles = Article::popular(10)->get();
 
         return view('articles.index', compact('articles', 'popularArticles'));

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="col-lg-7 mx-auto">
-        <form class="border border-white rounded p-3 bg-white" action="{{ route('articles.comments.update', [$article, $comment]) }}" method="POST">
+        <form class="border border-white rounded p-3 bg-white shadow-sm" action="{{ route('articles.comments.update', [$article, $comment]) }}" method="POST">
             @csrf
             @method('PATCH')
             <div class="form-group pb-3">
