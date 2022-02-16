@@ -14,7 +14,7 @@ class AddSlugColumnToArticlesTable extends Migration
     public function up()
     {
         Schema::table('articles', function (Blueprint $table) {
-            $table->string('slug');
+            $table->string('slug')->unique();
         });
     }
 
