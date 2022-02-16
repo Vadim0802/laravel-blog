@@ -40,7 +40,7 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request, StoreArticleAction $action)
     {
-        $action->handle($request->validated());
+        $action($request->validated());
 
         return to_route('articles.index')->with('success', 'Article created successfully!');
     }

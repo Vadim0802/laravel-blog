@@ -30,7 +30,7 @@ class ArticleLikeController extends Controller
     public function store(Article $article, StoreArticleLikeAction $action)
     {
         $this->authorize('create', ArticleLike::class);
-        $action->handle($article);
+        $action($article);
 
         return to_route('articles.show', $article);
     }

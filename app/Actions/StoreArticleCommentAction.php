@@ -7,7 +7,7 @@ use App\Models\ArticleComment;
 
 class StoreArticleCommentAction
 {
-    public function handle(array $data, Article $article)
+    public function __invoke(array $data, Article $article): ArticleComment
     {
         $comment = new ArticleComment($data);
         $comment->user()->associate(auth()->user());

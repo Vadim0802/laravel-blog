@@ -20,7 +20,7 @@ class ArticleCommentController extends Controller
      */
     public function store(StoreArticleCommentRequest $request, Article $article, StoreArticleCommentAction $action)
     {
-        $action->handle($request->validated(), $article);
+        $action($request->validated(), $article);
 
         return to_route('articles.show', $article)->with('success', 'Comment successfully created!');
     }
