@@ -16,9 +16,9 @@ class ArticleLikeController extends Controller
      */
     public function index(Article $article)
     {
-        $likes = $article->likes()->orderBy('id', 'desc')->paginate(10);
-
-        return view('article_likes.index', compact('likes'));
+        return view('article_likes.index', [
+            'likes' => $article->likes()->latest()->paginate(10)
+        ]);
     }
 
     /**

@@ -6,7 +6,7 @@
             <div class="card-header">
                 <h2>{{ $article->title }}</h2>
                 <div class="text-end">
-                    <small>Author: {{ $article->user->name }}</small>
+                    <small>Author: {{ $article->author->name }}</small>
                 </div>
                 <div class="text-end">
                     <small>Created: {{ $article->created_at->format('Y/m/d') }}</small>

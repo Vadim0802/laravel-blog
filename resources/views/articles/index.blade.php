@@ -9,7 +9,7 @@
                         {{ session('success')  }}
                     </div>
                 @endif
-    
+
                 @foreach($articles as $article)
                     <div class="card my-3">
                         <div class="card-header">
@@ -23,7 +23,7 @@
                             </p>
                         </div>
                         <div class="card-footer p-1">
-                            <p class="card-text text-end"><small>{{ $article->user->name }}</small></p>
+                            <p class="card-text text-end"><small>{{ $article->author->name }}</small></p>
                         </div>
                     </div>
                 @endforeach

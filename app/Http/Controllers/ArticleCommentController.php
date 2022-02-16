@@ -22,7 +22,8 @@ class ArticleCommentController extends Controller
     {
         $action($request->validated(), $article);
 
-        return to_route('articles.show', $article)->with('success', 'Comment successfully created!');
+        return to_route('articles.show', $article)
+            ->with('success', 'Comment successfully created!');
     }
 
     /**
@@ -34,7 +35,10 @@ class ArticleCommentController extends Controller
      */
     public function edit(Article $article, ArticleComment $comment)
     {
-        return view('article_comments.edit', compact('article', 'comment'));
+        return view('article_comments.edit', [
+            'article' => $article,
+            'comment' => $comment
+        ]);
     }
 
     /**
@@ -48,7 +52,8 @@ class ArticleCommentController extends Controller
     {
         $comment->update($request->validated());
 
-        return to_route('articles.show', $article)->with('success', 'Your comment successfully updated!');
+        return to_route('articles.show', $article)
+            ->with('success', 'Your comment successfully updated!');
     }
 
     /**
@@ -62,6 +67,7 @@ class ArticleCommentController extends Controller
     {
         $comment->delete();
 
-        return to_route('articles.show', $article)->with('success', 'Your comment successfully deleted!');
+        return to_route('articles.show', $article)
+            ->with('success', 'Your comment successfully deleted!');
     }
 }

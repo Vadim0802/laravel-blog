@@ -15,9 +15,9 @@ class Article extends Model
         'title', 'content', 'likes_count', 'slug'
     ];
 
-    public function user()
+    public function author()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function comments()

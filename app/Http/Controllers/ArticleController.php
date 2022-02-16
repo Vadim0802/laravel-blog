@@ -16,10 +16,13 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::query()->with('user')->orderBy('created_at', 'desc')->paginate(10);
+        $articles = Article::query()->with('author')->latest()->paginate(10);
         $popularArticles = Article::popular(10)->get();
 
-        return view('articles.index', compact('articles', 'popularArticles'));
+        return view('articles.index', [
+            'articles' => $articles,
+            'popularArticles' => $popularArticles
+        ]);
     }
 
     /**
@@ -42,7 +45,8 @@ class ArticleController extends Controller
     {
         $action($request->validated());
 
-        return to_route('articles.index')->with('success', 'Article created successfully!');
+        return to_route('articles.index')
+            ->with('success', 'Article created successfully!');
     }
 
     /**
@@ -53,9 +57,9 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        $article->load(['comments', 'user', 'likes']);
-
-        return view('articles.show', compact('article'));
+        return view('articles.show', [
+            'article' => $article->load(['comments', 'author', 'likes'])
+        ]);
     }
 
     /**
@@ -66,7 +70,9 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        return view('articles.edit', compact('article'));
+        return view('articles.edit', [
+            'article' => $article
+        ]);
     }
 
     /**
@@ -80,7 +86,8 @@ class ArticleController extends Controller
     {
         $article->update($request->validated());
 
-        return to_route('articles.show', $article)->with('success', 'The article has been successfully updated!');
+        return to_route('articles.show', $article)
+            ->with('success', 'The article has been successfully updated!');
     }
 
     /**
@@ -93,6 +100,7 @@ class ArticleController extends Controller
     {
         $article->delete();
 
-        return to_route('articles.index')->with('success', 'Article deleted successfully!');
+        return to_route('articles.index')
+            ->with('success', 'Article deleted successfully!');
     }
 }
