@@ -12,7 +12,8 @@ Auth::routes();
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::resource('articles', ArticleController::class)
-    ->scoped(['article' => 'slug']);
+    ->scoped(['article' => 'slug'])
+    ->middleware('slugify');
 
 Route::resource('articles.likes', ArticleLikeController::class)->only('index', 'store', 'destroy')
     ->scoped(['article' => 'slug']);
