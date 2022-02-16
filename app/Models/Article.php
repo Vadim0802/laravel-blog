@@ -12,17 +12,8 @@ class Article extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'content', 'likes_count'
+        'title', 'content', 'likes_count', 'slug'
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->slug = Str::slug($model->title);
-        });
-    }
 
     public function user()
     {
