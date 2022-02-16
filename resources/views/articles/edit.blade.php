@@ -9,9 +9,9 @@
                 <label for="title"><strong>Title</strong></label>
                 <input class="form-control" type="text" name="title" id="title" value="{{ old('title') ?? $article->title }}">
             </div>
-            @error('title')
+            @error('slug')
             <div class="alert alert-warning py-1" role="alert">
-                {{ $message }}
+                {{ Str::swap(['slug' => 'title'], $message) }}
             </div>
             @enderror
             <div class="form-group py-3">
