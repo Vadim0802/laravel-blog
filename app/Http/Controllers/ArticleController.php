@@ -16,8 +16,13 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::query()->with('author')->latest()->paginate(10);
-        $popularArticles = Article::popular(10)->get();
+        $articles = Article::query()
+            ->with('author')
+            ->filter(request(['search']))
+            ->latest()
+            ->paginate(10);
+
+        $popularArticles = Article::popular(15)->get();
 
         return view('articles.index', [
             'articles' => $articles,

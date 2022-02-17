@@ -11286,3 +11286,11 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+#popular-articles-body {
+    max-height: 50vh;
+    overflow: hidden;
+}
+
+#popular-articles-body:hover {
+    overflow: auto;
+}

@@ -17,7 +17,7 @@ class ArticleLikeController extends Controller
     public function index(Article $article)
     {
         return view('article_likes.index', [
-            'likes' => $article->likes()->latest()->paginate(10)
+            'likes' => $article->likes()->with('user')->latest()->paginate(10)
         ]);
     }
 

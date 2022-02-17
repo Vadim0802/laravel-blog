@@ -32,6 +32,15 @@ class Article extends Model
 
     public function scopePopular(Builder $query, int $count)
     {
-        return $query->orderBy('likes_count', 'desc')->limit($count);
+        $query->orderBy('likes_count', 'desc')->limit($count);
+    }
+
+    public function scopeFilter(Builder $query, array $filters)
+    {
+        $query->when($filters['search'] ?? false, function ($query, $search) {
+            return $query
+                ->where('title', 'like', '%' . $search . '%')
+                ->orWhere('content', 'like', '%' . $search . '%');
+        });
     }
 }

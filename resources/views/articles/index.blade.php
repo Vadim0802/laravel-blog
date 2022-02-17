@@ -4,13 +4,19 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
+                <form action="{{ route('articles.index') }}" method="get">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="search" placeholder="Search" value="{{ request('search') }}">
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-8">
                 @if (session('success'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('success')  }}
+                    <div class="alert alert-success mt-3" role="alert">
+                        {{ session('success') }}
                     </div>
                 @endif
-
-                @foreach($articles as $article)
+                @forelse ($articles as $article)
                     <div class="card my-3">
                         <div class="card-header">
                             <a class="link-secondary" href="{{ route('articles.show', $article) }}">
@@ -19,14 +25,18 @@
                         </div>
                         <div class="card-body">
                             <p class="card-text">
-                                {{ $article->content }}
+                                {{ Str::limit($article->content, 200) }}
                             </p>
                         </div>
                         <div class="card-footer p-1">
                             <p class="card-text text-end"><small>{{ $article->author->name }}</small></p>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <div class="alert alert-warning my-3" role="alert">
+                        Not found
+                    </div>
+                @endforelse
                 {{ $articles->links() }}
             </div>
             <div class="col-lg-4">
@@ -34,9 +44,9 @@
                     <div class="card-header">
                         <strong>Most Popular Articles</strong>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" id="popular-articles-body">
                         @foreach ($popularArticles as $popularArticle)
-                            <a href="{{ route('articles.show', $popularArticle) }}">{{ $popularArticle->title }}</a>
+                            <a class="" href="{{ route('articles.show', $popularArticle) }}">{{ $popularArticle->title }}</a>
                             <small>{{ $popularArticle->likes_count }} likes</small>
                             @if (!$loop->last)
                                 <hr>

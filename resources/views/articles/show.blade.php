@@ -22,7 +22,11 @@
                 <p class="card-text">{{ $article->content }}</p>
             </div>
             <div class="card-footer d-flex justify-content-between">
-                <small><a href="{{ route('articles.likes.index', $article) }}">Likes: {{ $article->likes_count }}</a></small>
+                @if ($article->likes_count)
+                    <small><a href="{{ route('articles.likes.index', $article) }}">Likes: {{ $article->likes_count }}</a></small>
+                @else
+                    <small>Likes: {{ $article->likes_count }}</small>
+                @endif
                 @auth
                     @if ($article->likes->pluck('user_id')->contains(auth()->id()))
                         <a class="btn btn-outline-danger" href="{{ route('articles.likes.destroy', [$article, $article->likes->firstWhere('user_id', auth()->id())]) }}" data-method="DELETE" rel="nofollow">Dislike</a>
