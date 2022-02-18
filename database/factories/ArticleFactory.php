@@ -19,7 +19,8 @@ class ArticleFactory extends Factory
         $users = User::all();
 
         return [
-            'title' => $this->faker->text(100),
+            'title' => $this->faker->text(50),
+            'slug' => $this->faker->slug(20),
             'content' => $this->faker->text(1000),
             'user_id' => $users->random()->id
         ];
