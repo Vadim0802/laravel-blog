@@ -37,7 +37,7 @@
                         Not found
                     </div>
                 @endforelse
-                {{ $articles->links() }}
+                {{ $articles->appends(request()->query())->links() }}
             </div>
             <div class="col-lg-4">
                 <div class="card my-3">
