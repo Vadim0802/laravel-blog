@@ -30,6 +30,6 @@ class ArticleLikePolicy
      */
     public function delete(User $user, ArticleLike $like)
     {
-        return $user->id === $like->user_id;
+        return $like->user()->is($user);
     }
 }

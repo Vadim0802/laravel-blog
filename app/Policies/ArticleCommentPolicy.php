@@ -28,9 +28,9 @@ class ArticleCommentPolicy
      * @param  \App\Models\ArticleComment  $articleComment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, ArticleComment $articleComment)
+    public function update(User $user, ArticleComment $comment)
     {
-        return $user->id === $articleComment->user_id;
+        return $comment->user()->is($user);
     }
 
     /**
@@ -40,8 +40,8 @@ class ArticleCommentPolicy
      * @param  \App\Models\ArticleComment  $articleComment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, ArticleComment $articleComment)
+    public function delete(User $user, ArticleComment $comment)
     {
-        return $user->id === $articleComment->user_id;
+        return $comment->user()->is($user);
     }
 }
