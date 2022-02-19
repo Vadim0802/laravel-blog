@@ -32,9 +32,7 @@ class ArticleControllerTest extends TestCase
 
     public function testIndexWithFilter()
     {
-        $article = Article::factory()->make();
-        $article->author()->associate($this->user);
-        $article->save();
+        $article = $this->createArticle($this->user);
 
         $response = $this->get(route('articles.index', ['search' => $article->title]));
         $response->assertOk();
@@ -51,7 +49,6 @@ class ArticleControllerTest extends TestCase
         $articleData = [
             'title' => $this->faker->sentence(5),
             'content' => $this->faker->sentence(100),
-            'user_id' => $this->user->id
         ];
 
         $response = $this->post(route('articles.store'), $articleData);
@@ -59,7 +56,8 @@ class ArticleControllerTest extends TestCase
         $response->assertRedirect();
 
         $this->assertDatabaseHas('articles', array_merge($articleData, [
-            'slug' => Str::slug($articleData['title'])
+            'slug' => Str::slug($articleData['title']),
+            'user_id' => $this->user->id
         ]));
     }
 
@@ -86,7 +84,6 @@ class ArticleControllerTest extends TestCase
         $articleData = [
             'title' => $this->faker->sentence(5),
             'content' => $this->faker->sentence(50),
-            'user_id' => $this->user->id
         ];
 
         $response = $this->patch(route('articles.update', $article), $articleData);
@@ -94,7 +91,8 @@ class ArticleControllerTest extends TestCase
         $response->assertRedirect();
 
         $this->assertDatabaseHas('articles', array_merge($articleData, [
-            'slug' => Str::slug($articleData['title'])
+            'slug' => Str::slug($articleData['title']),
+            'user_id' => $this->user->id
         ]));
     }
 
