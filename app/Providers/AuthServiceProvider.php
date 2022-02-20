@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Article;
 use App\Models\ArticleComment;
+use App\Models\User;
 use App\Policies\ArticleCommentPolicy;
 use App\Policies\ArticlePolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -17,7 +19,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Article::class => ArticlePolicy::class,
-        ArticleComment::class => ArticleCommentPolicy::class
+        ArticleComment::class => ArticleCommentPolicy::class,
+        User::class => UserPolicy::class
     ];
 
     /**
