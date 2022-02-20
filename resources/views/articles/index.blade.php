@@ -29,7 +29,13 @@
                             </p>
                         </div>
                         <div class="card-footer p-1">
-                            <p class="card-text text-end"><small>{{ $article->author->name }}</small></p>
+                            <p class="card-text text-end">
+                                <small>
+                                    <a href="{{ route('users.show', $article->author) }}">
+                                        {{ $article->author->name }}
+                                    </a>
+                                </small>
+                            </p>
                         </div>
                     </div>
                 @empty
