@@ -4,7 +4,6 @@ namespace Tests\Feature\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class RegisterControllerTest extends TestCase
@@ -20,7 +19,7 @@ class RegisterControllerTest extends TestCase
 
     public function testRegister()
     {
-        $password = $this->faker->password;
+        $password = $this->faker->password(8);
         $userData = collect([
             'name' => $this->faker->name,
             'email' => $this->faker->email,
