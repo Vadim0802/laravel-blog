@@ -14,15 +14,13 @@ class UserControllerTest extends TestCase
     use WithFaker;
 
     private User $user;
-    private string $password;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->password = $this->faker->password(8);
         $this->user = User::factory()->create([
-            'password' => Hash::make($this->password)
+            'password' => $this->faker->password(8)
         ]);
         $this->actingAs($this->user);
     }

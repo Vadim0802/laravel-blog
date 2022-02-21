@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Tests\TestCase;
+
 use function route;
 
 class ArticleControllerTest extends TestCase
@@ -110,6 +111,7 @@ class ArticleControllerTest extends TestCase
 
     public function createArticle($user)
     {
+        /* @var Article $article */
         $article = Article::factory()->make();
         $article->author()->associate($user);
         $article->save();

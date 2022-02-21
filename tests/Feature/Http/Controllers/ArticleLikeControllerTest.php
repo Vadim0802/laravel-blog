@@ -3,11 +3,9 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Models\Article;
-use App\Models\ArticleComment;
 use App\Models\ArticleLike;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ArticleLikeControllerTest extends TestCase
@@ -22,6 +20,7 @@ class ArticleLikeControllerTest extends TestCase
         parent::setUp();
         $user = User::factory()->create();
 
+        /* @var Article $article */
         $article = Article::factory()->make();
         $article->author()->associate($user);
         $article->save();
@@ -34,7 +33,6 @@ class ArticleLikeControllerTest extends TestCase
 
     public function testIndex()
     {
-        $route = route('articles.likes.index', $this->article);
         $response = $this->get(route('articles.likes.index', $this->article));
         $response->assertOk();
     }
@@ -71,7 +69,7 @@ class ArticleLikeControllerTest extends TestCase
         $this->assertDatabaseMissing('article_likes', $likeData);
     }
 
-    public function createLike($user, $article)
+    public function createLike($user, $article): ArticleLike
     {
         $like = new ArticleLike();
         $like->user()->associate($user);

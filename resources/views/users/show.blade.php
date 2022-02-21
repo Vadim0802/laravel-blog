@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container shadow-sm bg-white rounded-3">
+    <div class="container shadow-sm bg-white rounded-3 p-3">
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="row">
             <div class="col-lg-4">
                 <div class="d-flex flex-column py-3 gap-1">

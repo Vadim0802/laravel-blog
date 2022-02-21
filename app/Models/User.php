@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Model implements Authenticatable, CanResetPassword, Authorizable
@@ -28,17 +29,17 @@ class User extends Model implements Authenticatable, CanResetPassword, Authoriza
         'remember_token',
     ];
 
-    public function articles()
+    public function articles(): HasMany
     {
         return $this->hasMany(Article::class);
     }
 
-    public function likes()
+    public function likes(): HasMany
     {
         return $this->hasMany(ArticleLike::class);
     }
 
-    public function comments()
+    public function comments(): HasMany
     {
         return $this->hasMany(ArticleComment::class);
     }

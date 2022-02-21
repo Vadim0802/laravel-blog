@@ -86,6 +86,7 @@ class ArticleCommentControllerTest extends TestCase
 
     public function createComment($user, $article)
     {
+        /* @var ArticleComment $comment */
         $comment = ArticleComment::factory()->make();
         $comment->user()->associate($user);
         $comment->article()->associate($article);
