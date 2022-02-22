@@ -53,11 +53,11 @@ class User extends Model implements Authenticatable, CanResetPassword, Authoriza
         return $this->hasMany(ArticleComment::class);
     }
 
-    public function getProfilePictureAttribute()
-    {
-        if (! $this->attributes['profile_picture']) {
-            return static::DEFAULT_PICTURE;
-        }
-        return $this->attributes['profile_picture'];
-    }
+    // public function getProfilePictureAttribute()
+    // {
+    //     if (! $this->attributes['profile_picture']) {
+    //         return static::DEFAULT_PICTURE;
+    //     }
+    //     return $this->attributes['profile_picture'];
+    // }
 }

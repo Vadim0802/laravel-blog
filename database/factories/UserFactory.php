@@ -19,7 +19,8 @@ class UserFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->email(),
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
+            'profile_picture' => User::DEFAULT_PICTURE
         ];
     }
 }

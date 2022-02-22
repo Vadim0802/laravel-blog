@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Auth;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -34,6 +35,9 @@ class RegisterControllerTest extends TestCase
         $response->assertRedirect();
 
         $this->assertAuthenticated();
-        $this->assertDatabaseHas('users', $userData->except(['password'])->all());
+        $this->assertDatabaseHas('users', $userData
+            ->except(['password'])
+            ->merge(['profile_picture' => User::DEFAULT_PICTURE])
+            ->all());
     }
 }
