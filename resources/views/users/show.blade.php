@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container shadow-sm bg-white rounded-3 p-3">
+    <div class="container shadow-sm bg-white rounded-3 p-3 border">
         @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="d-flex flex-column mx-3 py-3 gap-2">
-                    <img class="img-thumbnail"  width="200" height="200" src="{{ asset($user->profile_picture) }}" alt="profile_picture">
+                    <img class="img-thumbnail" width="200" height="200" src="{{ asset($user->profile_picture) }}" alt="profile_picture">
                     <section>
                         <h4>{{ $user->name }}</h4>
                         <small>On Articabr since {{ $user->created_at->format('d F Y')  }}</small>

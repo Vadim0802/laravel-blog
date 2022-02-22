@@ -3,7 +3,7 @@
 @section('content')
     <div class="col-lg-8 mx-auto">
         <h2>Update profile</h2>
-        <form class="border border-white rounded p-3 bg-white shadow-sm" action="{{ route('users.update', $user) }}" method="POST" enctype="multipart/form-data">
+        <form class="border rounded p-3 bg-white shadow-sm" action="{{ route('users.update', $user) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             <div class="form-group py-3">

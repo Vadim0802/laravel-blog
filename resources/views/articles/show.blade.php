@@ -41,7 +41,12 @@
             <div class="col-lg-7">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
-                        {{ $comment->user->name }}
+                        <div>
+                            <img class="rounded-3" src="{{ asset($comment->user->profile_picture) }}" width="40" height="40" alt="comment_author">
+                            <span class="mx-2">
+                                {{ $comment->user->name }}
+                            </span>
+                        </div>
                         @canany(['update', 'delete'], $comment)
                             <div>
                                 <a href="{{ route('articles.comments.edit', [$article, $comment]) }}">Edit</a>
@@ -65,7 +70,7 @@
         @endforelse
         @can('create', \App\Models\ArticleComment::class)
             <div class="col-lg-7">
-                <form class="border border-white rounded p-3 bg-white shadow-sm" action="{{ route('articles.comments.store', $article) }}" method="POST">
+                <form class="border rounded p-3 bg-white shadow-sm" action="{{ route('articles.comments.store', $article) }}" method="POST">
                     @csrf
                     <div class="form-group pb-3">
                         <label for="comment"><strong>Comment</strong></label>

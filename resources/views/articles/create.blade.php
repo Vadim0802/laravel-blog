@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="col-lg-5 mx-auto">
-        <form class="border border-white rounded p-3 bg-white shadow-sm" action="{{ route('articles.store') }}" method="POST">
+        <form class="border rounded p-3 bg-white shadow-sm" action="{{ route('articles.store') }}" method="POST">
             @csrf
             <div class="form-group py-3">
                 <label for="title"><strong>Title</strong></label>
