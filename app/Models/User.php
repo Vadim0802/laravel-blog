@@ -10,6 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @property string name
+ * @property string email
+ * @property string password
+ * @property string profile_picture
+ */
 class User extends Model implements Authenticatable, CanResetPassword, Authorizable
 {
     use HasFactory;

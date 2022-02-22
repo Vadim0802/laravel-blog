@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string title
+ * @property string content
+ * @property integer likes_count
+ * @property string slug
+ */
 class Article extends Model
 {
     use HasFactory;
