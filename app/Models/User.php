@@ -18,10 +18,13 @@ class User extends Model implements Authenticatable, CanResetPassword, Authoriza
     use \Illuminate\Auth\Passwords\CanResetPassword;
     use \Illuminate\Foundation\Auth\Access\Authorizable;
 
+    public const DEFAULT_PICTURE = 'profile_pics/default_profile_picture.png';
+
     protected $fillable = [
         'name',
         'email',
         'password',
+        'profile_picture'
     ];
 
     protected $hidden = [
@@ -42,5 +45,13 @@ class User extends Model implements Authenticatable, CanResetPassword, Authoriza
     public function comments(): HasMany
     {
         return $this->hasMany(ArticleComment::class);
+    }
+
+    public function getProfilePictureAttribute()
+    {
+        if (! $this->attributes['profile_picture']) {
+            return static::DEFAULT_PICTURE;
+        }
+        return $this->attributes['profile_picture'];
     }
 }

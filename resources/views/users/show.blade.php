@@ -8,10 +8,13 @@
             </div>
         @endif
         <div class="row">
-            <div class="col-lg-4">
-                <div class="d-flex flex-column py-3 gap-1">
-                    <h4>{{ $user->name }}</h4>
-                    <small>On Articabr since {{ $user->created_at->format('d F Y')  }}</small>
+            <div class="col-lg-3">
+                <div class="d-flex flex-column mx-3 py-3 gap-2">
+                    <img class="img-thumbnail"  width="200" height="200" src="{{ asset($user->profile_picture) }}" alt="profile_picture">
+                    <section>
+                        <h4>{{ $user->name }}</h4>
+                        <small>On Articabr since {{ $user->created_at->format('d F Y')  }}</small>
+                    </section>
                     @if($user->is(auth()->user()))
                         <a class="btn btn-outline-primary w-50" href="{{ route('users.edit', $user) }}">Edit profile</a>
                     @endif

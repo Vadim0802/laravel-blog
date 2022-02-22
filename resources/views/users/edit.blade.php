@@ -3,7 +3,7 @@
 @section('content')
     <div class="col-lg-8 mx-auto">
         <h2>Update profile</h2>
-        <form class="border border-white rounded p-3 bg-white shadow-sm" action="{{ route('users.update', $user) }}" method="POST">
+        <form class="border border-white rounded p-3 bg-white shadow-sm" action="{{ route('users.update', $user) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             <div class="form-group py-3">
@@ -29,6 +29,15 @@
                 <input class="form-control" type="password" name="password" id="password" value="{{ old('password') }}">
             </div>
             @error('password')
+                <div class="alert alert-warning py-1" role="alert">
+                    {{ $message }}
+                </div>
+            @enderror
+            <div class="form-group py-3">
+                <label for="profile_picture"><strong>Avatar</strong></label>
+                <input class="form-control" type="file" name="profile_picture" id="profile_picture">
+            </div>
+            @error('profile_picture')
                 <div class="alert alert-warning py-1" role="alert">
                     {{ $message }}
                 </div>

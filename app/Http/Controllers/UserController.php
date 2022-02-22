@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\UpdateUserAction;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -41,12 +43,9 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user, UpdateUserAction $action)
     {
-        $userData = collect($request->validated());
-        $user->update($userData
-            ->replace(['password' => Hash::make($userData->get('password'))])
-            ->all());
+        $action($request->validated(), $user);
 
         return to_route('users.show', $user)
             ->with('success', 'Profile updated successfully!');
