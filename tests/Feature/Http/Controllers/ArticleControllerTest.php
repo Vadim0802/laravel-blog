@@ -62,6 +62,19 @@ class ArticleControllerTest extends TestCase
         ]));
     }
 
+    public function testGuestCannotStore()
+    {
+        $articleData = [
+            'title' => $this->faker->sentence(5),
+            'content' => $this->faker->sentence(100),
+        ];
+
+        auth()->logout();
+
+        $response = $this->post(route('articles.store'), $articleData);
+        $response->assertForbidden();
+    }
+
     public function testShow()
     {
         $article = $this->createArticle($this->user);
@@ -97,6 +110,37 @@ class ArticleControllerTest extends TestCase
         ]));
     }
 
+    public function testGuestCannotUpdateArticles()
+    {
+        $article = $this->createArticle($this->user);
+
+        $articleData = [
+            'title' => $this->faker->sentence(5),
+            'content' => $this->faker->sentence(50),
+        ];
+
+        auth()->logout();
+
+        $response = $this->patch(route('articles.update', $article), $articleData);
+        $response->assertForbidden();
+    }
+
+    public function testUserCannotUpdateNonOwnArticles()
+    {
+        $article = $this->createArticle($this->user);
+
+        $articleData = [
+            'title' => $this->faker->sentence(5),
+            'content' => $this->faker->sentence(50),
+        ];
+
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->patch(route('articles.update', $article), $articleData);
+        $response->assertForbidden();
+    }
+
     public function testDestroy()
     {
         $article = $this->createArticle($this->user);
@@ -107,6 +151,29 @@ class ArticleControllerTest extends TestCase
         $response->assertRedirect();
 
         $this->assertDatabaseMissing('articles', $articleData);
+    }
+
+    public function testGuestCannotDestroyArticles()
+    {
+        $article = $this->createArticle($this->user);
+
+        auth()->logout();
+
+        $response = $this->delete(route('articles.destroy', $article));
+        $response->assertForbidden();
+    }
+
+    public function testUserCannotDestroyNonOwnArticles()
+    {
+        $article = $this->createArticle($this->user);
+
+        auth()->logout();
+
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->delete(route('articles.destroy', $article));
+        $response->assertForbidden();
     }
 
     public function createArticle($user)

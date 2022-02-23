@@ -48,6 +48,13 @@ class ArticleLikeControllerTest extends TestCase
         ]);
     }
 
+    public function testGuestCannotStore()
+    {
+        auth()->logout();
+        $response = $this->post(route('articles.likes.store', $this->article));
+        $response->assertForbidden();
+    }
+
     public function testStoreWithExistingLike()
     {
         $this->createLike($this->user, $this->article);
