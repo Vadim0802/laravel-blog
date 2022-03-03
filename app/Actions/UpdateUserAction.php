@@ -20,7 +20,9 @@ class UpdateUserAction
             if ($user->profile_picture !== User::DEFAULT_PICTURE) {
                 Storage::delete($user->profile_picture);
             }
+
             $file = request()->file('profile_picture');
+
             $user->update([
                 'profile_picture' => $file->storeAs('profile_pics', "{$user->id}.{$file->extension()}")
             ]);
