@@ -26,6 +26,8 @@ class User extends Model implements Authenticatable, CanResetPassword, Authoriza
 
     public const DEFAULT_PICTURE = 'profile_pics/default_profile_picture.png';
 
+    protected $guarded = ['is_admin'];
+
     protected $fillable = [
         'name',
         'email',
