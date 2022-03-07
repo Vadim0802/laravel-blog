@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArticleCommentController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ArticleLikeController;
+use App\Http\Controllers\AdminManageArticleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -23,3 +24,10 @@ Route::resource('articles.likes', ArticleLikeController::class)->only('index', '
 
 Route::resource('articles.comments', ArticleCommentController::class)->only('store', 'edit', 'update', 'destroy')
     ->scoped(['article' => 'slug']);
+
+Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
+    Route::prefix('manage')->group(function () {
+        Route::get('articles', [AdminManageArticleController::class, 'index'])->name('admin_manage_articles_index');
+        Route::delete('articles/{article}', [AdminManageArticleController::class, 'destroy'])->name('admin_manage_articles_destroy');
+    });
+});

@@ -32,6 +32,11 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('articles.create') }}">Create Article</a>
                             </li>
+                            @if (auth()->user()->is_admin)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin_manage_articles_index') }}">Manage Articles</a>
+                                </li>
+                            @endif
                         @endauth
                     </ul>
                     <ul class="navbar-nav ms-auto">
