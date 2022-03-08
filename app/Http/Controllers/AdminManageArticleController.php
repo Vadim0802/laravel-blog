@@ -8,7 +8,7 @@ class AdminManageArticleController extends Controller
 {
     public function index()
     {
-        $articles = Article::query()->orderBy('created_at', 'desc')->paginate(15);
+        $articles = Article::query()->with(['author'])->orderBy('created_at', 'desc')->paginate(15);
 
         return view('admin.manage_articles', [
             'articles' => $articles
