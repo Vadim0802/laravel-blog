@@ -8,7 +8,7 @@
                     {{ session('success') }}
                 </div>
             @endif
-            <table class="table">
+            <table class="table table-striped table-bordered">
                 <thead>
                     <th scope="col">Author</th>
                     <th scope="col">Article</th>
