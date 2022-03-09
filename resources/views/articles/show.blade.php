@@ -40,12 +40,12 @@
                 </div>
             </div>
             @if($article->tags->count() > 0)
-                <div class="col-lg-2">
+                <div class="col-lg-2 border bg-light rounded-3 p-3">
+                    <h4>Tags</h4>
+                    <hr>
                     <div class="d-flex flex-wrap gap-2">
                         @foreach($article->tags as $tag)
-                            <div class="bg-white shadow-sm border-secondary rounded-3 p-1">
-                                {{ $tag->name }}
-                            </div>
+                            <a class="btn btn-outline-primary btn-sm" href="{{ route('articles.index', ['tag' => $tag->name]) }}">{{ $tag->name }}</a>
                         @endforeach
                     </div>
                 </div>
@@ -86,7 +86,7 @@
             @endforelse
         </div>
         @can('create', \App\Models\ArticleComment::class)
-            <div class="col-lg-7">
+            <div class="col-lg-7 mt-3">
                 <form class="border rounded p-3 bg-white shadow-sm" action="{{ route('articles.comments.store', $article) }}" method="POST">
                     @csrf
                     <div class="form-group pb-3">
