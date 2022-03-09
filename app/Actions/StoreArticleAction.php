@@ -13,6 +13,10 @@ class StoreArticleAction
         $article->author()->associate(auth()->user());
         $article->save();
 
+        foreach ($data['tags'] as $tag) {
+            $article->tags()->attach($tag);
+        }
+
         return $article;
     }
 }

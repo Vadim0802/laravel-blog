@@ -35,6 +35,11 @@ class Article extends Model
         return $this->hasMany(ArticleLike::class);
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'article_tag', 'article_id', 'tag_id');
+    }
+
     public function scopePopular(Builder $query, int $count)
     {
         $query->orderBy('likes_count', 'desc')->limit($count);

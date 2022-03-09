@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateArticleRequest;
 use App\Models\Article;
 use App\Actions\StoreArticleAction;
 use App\Http\Requests\StoreArticleRequest;
+use App\Models\Tag;
 
 class ArticleController extends Controller
 {
@@ -17,7 +18,7 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::query()
-            ->with('author')
+            ->with(['author', 'tags'])
             ->filter(request(['search']))
             ->latest()
             ->paginate(10);
@@ -37,7 +38,11 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        return view('articles.create');
+        $tags = Tag::all();
+
+        return view('articles.create', [
+            'tags' => $tags
+        ]);
     }
 
     /**

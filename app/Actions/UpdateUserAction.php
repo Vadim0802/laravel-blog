@@ -16,6 +16,7 @@ class UpdateUserAction
             ->replace(['password' => Hash::make($userData->get('password'))])
             ->all());
 
+
         if (request()->hasFile('profile_picture')) {
             if ($user->profile_picture !== User::DEFAULT_PICTURE) {
                 Storage::delete($user->profile_picture);

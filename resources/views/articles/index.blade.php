@@ -28,7 +28,15 @@
                                 {{ Str::limit($article->content, 200) }}
                             </p>
                         </div>
-                        <div class="card-footer p-1">
+                        <div class="card-footer p-1 d-flex justify-content-between align-items-center">
+                            <div class="d-flex gap-2">
+                                @foreach($article->tags as $tag)
+                                    @break($loop->index > 4)
+                                    <div class="bg-white shadow-sm border-secondary rounded-3 p-1">
+                                        {{ $tag->name }}
+                                    </div>
+                                @endforeach
+                            </div>
                             <p class="card-text text-end">
                                 <small>
                                     <a href="{{ route('users.show', $article->author) }}">
