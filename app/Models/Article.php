@@ -48,9 +48,13 @@ class Article extends Model
     public function scopeFilter(Builder $query, array $filters)
     {
         $query->when($filters['search'] ?? false, function ($query, $search) {
-            return $query
-                ->where('title', 'like', '%' . $search . '%')
-                ->orWhere('content', 'like', '%' . $search . '%');
+            return $query->where('title', 'like', '%' . $search . '%');
+        });
+
+        $query->when($filters['tag'] ?? false, function ($query, $tag) {
+            return $query->whereHas('tags', function ($query) use ($tag) {
+                return $query->where('name', $tag);
+            });
         });
     }
 }

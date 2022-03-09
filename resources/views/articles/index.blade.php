@@ -4,9 +4,27 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                <form action="{{ route('articles.index') }}" method="get">
-                    <div class="form-group">
+                <form class="d-flex gap-3" action="{{ route('articles.index') }}" method="GET">
+                    <div class="form-group flex-grow-1">
                         <input class="form-control" type="text" name="search" placeholder="Search" value="{{ request('search') }}">
+                    </div>
+                    <div class="form-group">
+                        <select class="form-select" name="tag">
+                            <option
+                                value=""
+                                @if(!request('tag'))
+                                    selected="selected"
+                                @endif
+                            >All</option>
+                            @foreach($tags as $tag)
+                                <option
+                                    value="{{ $tag->name }}"
+                                    @if($tag->name === request('tag'))
+                                        selected="selected"
+                                    @endif
+                                >{{ $tag->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </form>
             </div>

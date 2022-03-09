@@ -19,15 +19,17 @@ class ArticleController extends Controller
     {
         $articles = Article::query()
             ->with(['author', 'tags'])
-            ->filter(request(['search']))
+            ->filter(request(['search', 'tag']))
             ->latest()
             ->paginate(10);
 
         $popularArticles = Article::popular(15)->get();
+        $tags = Tag::all();
 
         return view('articles.index', [
             'articles' => $articles,
-            'popularArticles' => $popularArticles
+            'popularArticles' => $popularArticles,
+            'tags' => $tags
         ]);
     }
 
