@@ -36,6 +36,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('admin_manage_articles_index') }}">Manage Articles</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin_manage_tags_index') }}">Manage Tags</a>
+                                </li>
                             @endif
                         @endauth
                     </ul>
