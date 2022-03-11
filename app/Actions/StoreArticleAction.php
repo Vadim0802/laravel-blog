@@ -3,7 +3,6 @@
 namespace App\Actions;
 
 use App\Models\Article;
-use Illuminate\Support\Str;
 
 class StoreArticleAction
 {

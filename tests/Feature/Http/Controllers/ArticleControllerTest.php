@@ -3,7 +3,9 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Tag;
 use App\Models\User;
+use Database\Seeders\TagSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
@@ -47,19 +49,26 @@ class ArticleControllerTest extends TestCase
 
     public function testStore()
     {
-        $articleData = [
+        $this->seed(TagSeeder::class);
+        $tags = Tag::all('id')->map(fn ($item) => $item['id']);
+
+        $articleData = collect([
             'title' => $this->faker->sentence(5),
             'content' => $this->faker->sentence(100),
-        ];
+            'tags' => $tags->toArray()
+        ]);
 
-        $response = $this->post(route('articles.store'), $articleData);
+        $response = $this->post(route('articles.store'), $articleData->toArray());
         $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect();
 
-        $this->assertDatabaseHas('articles', array_merge($articleData, [
-            'slug' => Str::slug($articleData['title']),
-            'user_id' => $this->user->id
-        ]));
+        $articleData = $articleData->merge([
+                'slug' => Str::slug($articleData['title']),
+                'user_id' => $this->user->id
+            ])->except(['tags'])->toArray();
+
+        $this->assertDatabaseHas('articles', $articleData);
+        $this->assertDatabaseCount('article_tag', $tags->count());
     }
 
     public function testGuestCannotStore()
