@@ -23,6 +23,26 @@
                 {{ $message }}
             </div>
             @enderror
+            <div class="form-group py-3">
+                <label for="tags"><strong>Tags</strong></label>
+                <select multiple size="5" name="tags[]" id="tags" class="form-select">
+                    @forelse($tags as $tag)
+                        <option
+                            value="{{ $tag->id }}"
+                            @if($article->tags->contains($tag->id)))
+                                selected
+                            @endif
+                        >{{ $tag->name }}</option>
+                    @empty
+                        <option selected>No tags available</option>
+                    @endforelse
+                </select>
+            </div>
+            @error('tags')
+            <div class="alert alert-warning py-1" role="alert">
+                {{ $message }}
+            </div>
+            @enderror
             <button class="btn btn-outline-primary" type="submit">Update</button>
         </form>
     </div>

@@ -20,7 +20,7 @@
                                 <option
                                     value="{{ $tag->name }}"
                                     @if($tag->name === request('tag'))
-                                        selected="selected"
+                                        selected
                                     @endif
                                 >{{ $tag->name }}</option>
                             @endforeach
