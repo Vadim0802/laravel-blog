@@ -104,7 +104,7 @@ class ArticleControllerTest extends TestCase
     {
         $article = $this->createArticle($this->user);
         $this->seed(TagSeeder::class);
-        $article->tags()->detach(Tag::all());
+        $article->tags()->attach(Tag::all());
 
         $tag = Tag::all('id')->first();
 
