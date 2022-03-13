@@ -16,7 +16,7 @@
             @error('name')
                 <div class="alert alert-warning py-1" role="alert">
                     {{ $message }}
-                </div
+                </div>
             @enderror
             <table class="table table-striped table-bordered">
                 <thead>

@@ -2,50 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\UpdateUserAction;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\View\View
-     */
     public function show(User $user)
     {
-        return view('users.show', [
-            'user' => $user
-        ]);
+        return view('users.show', compact('user'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\View\View
-     */
     public function edit(User $user)
     {
-        return view('users.edit', [
-            'user' => $user
-        ]);
+        return view('users.edit', compact('user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(UpdateUserRequest $request, User $user, UpdateUserAction $action)
+    public function update(UpdateUserRequest $request, User $user, UserService $userService)
     {
-        $action($request->validated(), $user);
+        $userService->updateUser(
+            $request->name,
+            $request->email,
+            $request->password,
+            $request->file('profile_picture'),
+            $user
+        );
 
         return to_route('users.show', $user)
             ->with('success', 'Profile updated successfully!');

@@ -2,51 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\StoreArticleLikeAction;
 use App\Models\Article;
 use App\Models\ArticleLike;
+use App\Services\ArticleLikeService;
 
 class ArticleLikeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @param  \App\Models\Article  $article
-     * @return \Illuminate\View\View
-     */
-    public function index(Article $article)
+    public function index(Article $article, ArticleLikeService $articleLikeService)
     {
-        return view('article_likes.index', [
-            'likes' => $article->likes()->with('user')->latest()->paginate(10)
-        ]);
+        $likes = $articleLikeService->getLikes($article);
+
+        return view('article_likes.index', compact('likes'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Article $article, StoreArticleLikeAction $action)
+    public function store(Article $article, ArticleLikeService $articleLikeService)
     {
         $this->authorize('create', ArticleLike::class);
-        $action($article);
+
+        $articleLikeService->storeNewLike($article);
 
         return to_route('articles.show', $article);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Article  $article
-     * @param  \App\Models\ArticleLike  $like
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy(Article $article, ArticleLike $like)
+    public function destroy(Article $article, ArticleLike $like, ArticleLikeService $articleLikeService)
     {
         $this->authorize('delete', $like);
-        $like->delete();
-        $article->update(['likes_count' => $article->likes_count - 1]);
+
+        $articleLikeService->deleteLike($article, $like);
 
         return to_route('articles.show', $article);
     }

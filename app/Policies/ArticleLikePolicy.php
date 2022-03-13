@@ -10,24 +10,11 @@ class ArticleLikePolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can create models.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
     public function create(User $user)
     {
         return auth()->check();
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\ArticleLike  $like
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
     public function delete(User $user, ArticleLike $like)
     {
         return $like->user()->is($user);

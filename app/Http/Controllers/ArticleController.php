@@ -2,120 +2,81 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\UpdateArticleAction;
+use App\Services\TagService;
+use Illuminate\Http\Request;
 use App\Http\Requests\UpdateArticleRequest;
-use App\Models\Article;
-use App\Actions\StoreArticleAction;
 use App\Http\Requests\StoreArticleRequest;
-use App\Models\Tag;
+use App\Services\ArticleService;
+use App\Models\Article;
 
 class ArticleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function index()
+    public function index(Request $request, ArticleService $articleService, TagService $tagService)
     {
-        $articles = Article::query()
-            ->with(['author', 'tags'])
-            ->filter(request(['search', 'tag']))
-            ->latest()
-            ->paginate(10);
+        $articles = $articleService->getArticles(
+            $request->tag,
+            $request->search
+        );
 
-        $popularArticles = Article::popular(15)->get();
-        $tags = Tag::all();
+        $tags = $tagService->getTags();
+        $popularArticles = $articleService->getPopularArticles();
 
-        return view('articles.index', [
-            'articles' => $articles,
-            'popularArticles' => $popularArticles,
-            'tags' => $tags
-        ]);
+        return view('articles.index', compact('articles', 'popularArticles', 'tags'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
+    public function create(TagService $tagService)
     {
-        $tags = Tag::all();
+        $tags = $tagService->getTags();
 
-        return view('articles.create', [
-            'tags' => $tags
-        ]);
+        return view('articles.create', compact('tags'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(StoreArticleRequest $request, StoreArticleAction $action)
+    public function store(StoreArticleRequest $request, ArticleService $articleService)
     {
-        $action($request->validated());
+        $articleService->storeNewArticle(
+            $request->title,
+            $request->content,
+            $request->slug,
+            $request->tags
+        );
 
         return to_route('articles.index')
             ->with('success', 'Article created successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Article  $article
-     * @return \Illuminate\View\View
-     */
     public function show(Article $article)
     {
-        return view('articles.show', [
-            'article' => $article->load(['comments', 'author', 'likes'])
-        ]);
+        $article->load(['comments', 'author', 'likes', 'tags']);
+
+        return view('articles.show', compact('article'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Article  $article
-     * @return \Illuminate\View\View
-     */
-    public function edit(Article $article)
+    public function edit(Article $article, TagService $tagService)
     {
-        $tags = Tag::all();
+        $article->load('tags');
+        $tags = $tagService->getTags();
 
-        return view('articles.edit', [
-            'article' => $article->load('tags'),
-            'tags' => $tags
-        ]);
+        return view('articles.edit', compact('article', 'tags'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(UpdateArticleRequest $request, Article $article, UpdateArticleAction $action)
+    public function update(UpdateArticleRequest $request, Article $article, ArticleService $articleService)
     {
-        $action($request->validated(), $article);
+        $articleService->updateArticle(
+            $request->title,
+            $request->content,
+            $request->slug,
+            $request->tags,
+            $article
+        );
 
         return to_route('articles.show', $article)
             ->with('success', 'The article has been successfully updated!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy(Article $article)
+    public function destroy(Article $article, ArticleService $articleService)
     {
         $this->authorize('delete', $article);
-        $article->delete();
+        $articleService->deleteArticle($article);
 
         return to_route('articles.index')
             ->with('success', 'Article deleted successfully!');

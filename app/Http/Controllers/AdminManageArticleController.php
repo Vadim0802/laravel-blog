@@ -3,21 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Services\ArticleService;
 
 class AdminManageArticleController extends Controller
 {
-    public function index()
+    public function index(ArticleService $articleService)
     {
-        $articles = Article::query()->with(['author'])->orderBy('created_at', 'desc')->paginate(15);
+        $articles = $articleService->getArticles(null, null);
 
-        return view('admin.manage_articles', [
-            'articles' => $articles
-        ]);
+        return view('admin.manage_articles', compact('articles'));
     }
 
-    public function destroy(Article $article)
+    public function destroy(Article $article, ArticleService $articleService)
     {
-        $article->delete();
+        $articleService->deleteArticle($article);
 
         return to_route('admin_manage_articles_index')->with('success', 'Article deleted successfully!');
     }

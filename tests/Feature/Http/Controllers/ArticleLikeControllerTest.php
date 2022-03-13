@@ -60,7 +60,7 @@ class ArticleLikeControllerTest extends TestCase
         $this->createLike($this->user, $this->article);
 
         $response = $this->post(route('articles.likes.store', $this->article));
-        $response->assertRedirect();
+        $response->assertStatus(500);
 
         $this->assertDatabaseCount('article_likes', 1);
     }

@@ -103,20 +103,30 @@ class ArticleControllerTest extends TestCase
     public function testUpdate()
     {
         $article = $this->createArticle($this->user);
+        $this->seed(TagSeeder::class);
+        $article->tags()->detach(Tag::all());
 
-        $articleData = [
+        $tag = Tag::all('id')->first();
+
+        $articleData = collect([
             'title' => $this->faker->sentence(5),
             'content' => $this->faker->sentence(50),
-        ];
+            'tags' => [$tag->id]
+        ]);
 
-        $response = $this->patch(route('articles.update', $article), $articleData);
+        $response = $this->patch(route('articles.update', $article), $articleData->toArray());
         $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect();
 
-        $this->assertDatabaseHas('articles', array_merge($articleData, [
-            'slug' => Str::slug($articleData['title']),
-            'user_id' => $this->user->id
-        ]));
+        $this->assertDatabaseHas('articles', $articleData
+            ->merge([
+                'slug' => Str::slug($articleData['title']),
+                'user_id' => $this->user->id
+            ])
+            ->except(['tags'])
+            ->toArray());
+
+        $this->assertDatabaseCount('article_tag', 1);
     }
 
     public function testGuestCannotUpdateArticles()
