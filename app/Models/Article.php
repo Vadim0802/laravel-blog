@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Filters\SearchFilter;
+use App\Filters\TagFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -47,14 +49,13 @@ class Article extends Model
 
     public function scopeFilter(Builder $query, array $filters)
     {
-        $query->when($filters['search'] ?? false, function ($query, $search) {
-            return $query->where('title', 'like', '%' . $search . '%');
-        });
+        $mappedFilters = [
+            'tag' => TagFilter::class,
+            'search' => SearchFilter::class
+        ];
 
-        $query->when($filters['tag'] ?? false, function ($query, $tag) {
-            return $query->whereHas('tags', function ($query) use ($tag) {
-                return $query->where('name', $tag);
-            });
-        });
+        foreach ($filters as $key => $value) {
+            (new $mappedFilters[$key]())->filter($query, $value);
+        }
     }
 }

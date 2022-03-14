@@ -11,29 +11,38 @@ use App\Models\Article;
 
 class ArticleController extends Controller
 {
-    public function index(Request $request, ArticleService $articleService, TagService $tagService)
+    private TagService $tagService;
+    private ArticleService $articleService;
+
+    public function __construct(ArticleService $articleService, TagService $tagService)
     {
-        $articles = $articleService->getArticles(
+        $this->articleService = $articleService;
+        $this->tagService = $tagService;
+    }
+
+    public function index(Request $request)
+    {
+        $articles = $this->articleService->getArticles(
             $request->tag,
             $request->search
         );
 
-        $tags = $tagService->getTags();
-        $popularArticles = $articleService->getPopularArticles();
+        $tags = $this->tagService->getTags();
+        $popularArticles = $this->articleService->getPopularArticles();
 
         return view('articles.index', compact('articles', 'popularArticles', 'tags'));
     }
 
-    public function create(TagService $tagService)
+    public function create()
     {
-        $tags = $tagService->getTags();
+        $tags = $this->tagService->getTags();
 
         return view('articles.create', compact('tags'));
     }
 
-    public function store(StoreArticleRequest $request, ArticleService $articleService)
+    public function store(StoreArticleRequest $request)
     {
-        $articleService->storeNewArticle(
+        $this->articleService->storeNewArticle(
             $request->title,
             $request->content,
             $request->slug,
@@ -51,17 +60,17 @@ class ArticleController extends Controller
         return view('articles.show', compact('article'));
     }
 
-    public function edit(Article $article, TagService $tagService)
+    public function edit(Article $article)
     {
         $article->load('tags');
-        $tags = $tagService->getTags();
+        $tags = $this->tagService->getTags();
 
         return view('articles.edit', compact('article', 'tags'));
     }
 
-    public function update(UpdateArticleRequest $request, Article $article, ArticleService $articleService)
+    public function update(UpdateArticleRequest $request, Article $article)
     {
-        $articleService->updateArticle(
+        $this->articleService->updateArticle(
             $request->title,
             $request->content,
             $request->slug,
@@ -73,10 +82,10 @@ class ArticleController extends Controller
             ->with('success', 'The article has been successfully updated!');
     }
 
-    public function destroy(Article $article, ArticleService $articleService)
+    public function destroy(Article $article)
     {
         $this->authorize('delete', $article);
-        $articleService->deleteArticle($article);
+        $this->articleService->deleteArticle($article);
 
         return to_route('articles.index')
             ->with('success', 'Article deleted successfully!');

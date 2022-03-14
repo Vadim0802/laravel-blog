@@ -8,27 +8,34 @@ use App\Services\ArticleLikeService;
 
 class ArticleLikeController extends Controller
 {
-    public function index(Article $article, ArticleLikeService $articleLikeService)
+    private ArticleLikeService $likeService;
+
+    public function __construct(ArticleLikeService $likeService)
     {
-        $likes = $articleLikeService->getLikes($article);
+        $this->likeService = $likeService;
+    }
+
+    public function index(Article $article)
+    {
+        $likes = $this->likeService->getLikes($article);
 
         return view('article_likes.index', compact('likes'));
     }
 
-    public function store(Article $article, ArticleLikeService $articleLikeService)
+    public function store(Article $article)
     {
         $this->authorize('create', ArticleLike::class);
 
-        $articleLikeService->storeNewLike($article);
+        $this->likeService->storeNewLike($article);
 
         return to_route('articles.show', $article);
     }
 
-    public function destroy(Article $article, ArticleLike $like, ArticleLikeService $articleLikeService)
+    public function destroy(Article $article, ArticleLike $like)
     {
         $this->authorize('delete', $like);
 
-        $articleLikeService->deleteLike($article, $like);
+        $this->likeService->deleteLike($article, $like);
 
         return to_route('articles.show', $article);
     }

@@ -7,16 +7,23 @@ use App\Services\ArticleService;
 
 class AdminManageArticleController extends Controller
 {
-    public function index(ArticleService $articleService)
+    private ArticleService $articleService;
+
+    public function __construct(ArticleService $articleService)
     {
-        $articles = $articleService->getArticles(null, null);
+        $this->articleService = $articleService;
+    }
+
+    public function index()
+    {
+        $articles = $this->articleService->getArticles(null, null);
 
         return view('admin.manage_articles', compact('articles'));
     }
 
-    public function destroy(Article $article, ArticleService $articleService)
+    public function destroy(Article $article)
     {
-        $articleService->deleteArticle($article);
+        $this->articleService->deleteArticle($article);
 
         return to_route('admin_manage_articles_index')->with('success', 'Article deleted successfully!');
     }

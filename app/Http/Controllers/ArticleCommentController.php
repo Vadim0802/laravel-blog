@@ -10,12 +10,16 @@ use App\Services\ArticleCommentService;
 
 class ArticleCommentController extends Controller
 {
-    public function store(
-        StoreArticleCommentRequest $request,
-        Article $article,
-        ArticleCommentService $articleCommentService
-    ) {
-        $articleCommentService->storeNewComment($request->content, $article);
+    private ArticleCommentService $commentService;
+
+    public function __construct(ArticleCommentService $commentService)
+    {
+        $this->commentService = $commentService;
+    }
+
+    public function store(StoreArticleCommentRequest $request, Article $article)
+    {
+        $this->commentService->storeNewComment($request->content, $article);
 
         return to_route('articles.show', $article)
             ->with('success', 'Comment successfully created!');
@@ -30,19 +34,18 @@ class ArticleCommentController extends Controller
         UpdateArticleCommentRequest $request,
         Article $article,
         ArticleComment $comment,
-        ArticleCommentService $articleCommentService
     ) {
-        $articleCommentService->updateComment($request->content, $comment);
+        $this->commentService->updateComment($request->content, $comment);
 
         return to_route('articles.show', $article)
             ->with('success', 'Your comment successfully updated!');
     }
 
-    public function destroy(Article $article, ArticleComment $comment, ArticleCommentService $articleCommentService)
+    public function destroy(Article $article, ArticleComment $comment)
     {
         $this->authorize('delete', $comment);
 
-        $articleCommentService->deleteComment($comment);
+        $this->commentService->deleteComment($comment);
 
         return to_route('articles.show', $article)
             ->with('success', 'Your comment successfully deleted!');

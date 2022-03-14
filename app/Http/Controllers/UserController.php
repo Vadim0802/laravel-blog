@@ -8,6 +8,13 @@ use App\Services\UserService;
 
 class UserController extends Controller
 {
+    private UserService $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function show(User $user)
     {
         return view('users.show', compact('user'));
@@ -18,9 +25,9 @@ class UserController extends Controller
         return view('users.edit', compact('user'));
     }
 
-    public function update(UpdateUserRequest $request, User $user, UserService $userService)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $userService->updateUser(
+        $this->userService->updateUser(
             $request->name,
             $request->email,
             $request->password,
