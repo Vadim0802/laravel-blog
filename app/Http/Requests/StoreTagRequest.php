@@ -4,6 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property string name
+ */
 class StoreTagRequest extends FormRequest
 {
     public function authorize()

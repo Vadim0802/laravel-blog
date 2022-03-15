@@ -5,6 +5,12 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property string name
+ * @property string email
+ * @property string password
+ * @property mixed profile_picture
+ */
 class UpdateUserRequest extends FormRequest
 {
     public function authorize()

@@ -7,6 +7,12 @@ use App\Models\Tag;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property string title
+ * @property string slug
+ * @property string content
+ * @property array tags
+ */
 class StoreArticleRequest extends FormRequest
 {
     public function authorize()

@@ -4,6 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property string content
+ */
 class UpdateArticleCommentRequest extends FormRequest
 {
     public function authorize()
