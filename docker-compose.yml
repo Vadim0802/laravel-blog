@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+
+  application:
+    build: .
+    command: ['make', 'setup']
+    ports:
+      - "8000:8000"
+    working_dir: /app
+    volumes:
+      - ./:/app
+    depends_on:
+      - pgsql
+
+  pgsql:
+    image: postgres:14.2-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: laravel-blog
+    volumes:
+      - blog-data:/var/lib/postgresql/data
+
+volumes:
+  blog-data:
+
