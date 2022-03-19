@@ -1,4 +1,4 @@
-setup: composer frontend key migrate seed start-app
+setup: composer frontend key migrate start-app
 
 start-app:
 	php artisan serve --host 0.0.0.0 --port 8000
