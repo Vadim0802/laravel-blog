@@ -16,7 +16,7 @@ class AdminManageArticleController extends Controller
 
     public function index()
     {
-        $articles = $this->articleService->getArticles(null, null);
+        $articles = $this->articleService->getArticles();
 
         return view('admin.manage_articles', compact('articles'));
     }

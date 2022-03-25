@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Filters\SearchFilter;
-use App\Filters\TagFilter;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -40,22 +37,5 @@ class Article extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'article_tag', 'article_id', 'tag_id');
-    }
-
-    public function scopePopular(Builder $query, int $count)
-    {
-        $query->orderBy('likes_count', 'desc')->limit($count);
-    }
-
-    public function scopeFilter(Builder $query, array $filters)
-    {
-        $mappedFilters = [
-            'tag' => TagFilter::class,
-            'search' => SearchFilter::class
-        ];
-
-        foreach ($filters as $key => $value) {
-            (new $mappedFilters[$key]())->filter($query, $value);
-        }
     }
 }

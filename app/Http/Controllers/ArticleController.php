@@ -24,7 +24,8 @@ class ArticleController extends Controller
     {
         $articles = $this->articleService->getArticles(
             $request->tag,
-            $request->search
+            $request->search,
+            $request->author
         );
 
         $tags = $this->tagService->getTags();

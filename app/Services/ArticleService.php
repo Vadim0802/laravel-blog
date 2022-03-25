@@ -2,25 +2,49 @@
 
 namespace App\Services;
 
+use App\Filters\SearchFilter;
+use App\Filters\AuthorFilter;
+use App\Filters\TagFilter;
 use App\Models\Article;
 
 class ArticleService
 {
-    public function getArticles(string|null $tag, string|null $search, int $paginate = 10)
+    public function getArticles(?string $tag = null, ?string $search = null, ?string $author = null, int $paginate = 10)
     {
-        $filters = $this->getFilters($tag, $search);
-        $articles = Article::query()
+        $filters = [
+            'tag' => $tag,
+            'search' => $search,
+            'author' => $author
+        ];
+        $articles = $this->getFilteredArticles($filters)
             ->with(['author', 'tags'])
-            ->filter($filters)
             ->latest()
             ->paginate($paginate);
 
         return $articles;
     }
 
-    public function getPopularArticles(int $limit = 10)
+    public function getFilteredArticles(array $filters)
     {
-        $articles = Article::query()->popular($limit)->get();
+        $query = Article::query();
+
+        $mappedFilters = [
+            'tag' => TagFilter::class,
+            'search' => SearchFilter::class,
+            'author' => AuthorFilter::class
+        ];
+
+        foreach ($filters as $key => $value) {
+            $filter = new $mappedFilters[$key]();
+            $filter($query, $value);
+        }
+
+        return $query;
+    }
+
+    public function getPopularArticles(int $count = 10)
+    {
+        $articles = Article::query()->orderBy('likes_count', 'desc')->limit($count)->get();
 
         return $articles;
     }
@@ -56,20 +80,6 @@ class ArticleService
     public function deleteArticle(Article $article)
     {
         return $article->delete();
-    }
-
-    private function getFilters(string|null $tag, string|null $search)
-    {
-        $filters = [];
-
-        if ($tag) {
-            $filters['tag'] = $tag;
-        }
-        if ($search) {
-            $filters['search'] = $search;
-        }
-
-        return $filters;
     }
 
     private function attachTagsToArticle(Article $article, array $tags)
