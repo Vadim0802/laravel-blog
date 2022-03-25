@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class SearchFilter implements FilterInterface
 {
-    public function filter(Builder $query, string|null $value): Builder
+    public function __invoke(Builder $query, ?string $value): Builder
     {
-        return $query->when($value ?? false, function ($query, $search) {
+        return $query->when($value ?? false, function (Builder $query, string $search) {
             return $query->where('title', 'like', '%' . $search . '%');
         });
     }
