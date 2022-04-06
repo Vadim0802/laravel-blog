@@ -29,8 +29,7 @@ Route::resource('articles.comments', ArticleCommentController::class)->only('sto
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::prefix('manage')->group(function () {
         Route::get('articles', [AdminManageArticleController::class, 'index'])->name('admin_manage_articles_index');
-        Route::delete('articles/{article}', [AdminManageArticleController::class, 'destroy'])
-            ->name('admin_manage_articles_destroy');
+        Route::delete('articles/{article}', [AdminManageArticleController::class, 'destroy'])->name('admin_manage_articles_destroy');
 
         Route::get('tags', [AdminManageTagsController::class, 'index'])->name('admin_manage_tags_index');
         Route::post('tags', [AdminManageTagsController::class, 'store'])->name('admin_manage_tags_store');
