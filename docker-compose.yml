@@ -1,27 +1,40 @@
 version: '3.8'
 services:
 
-  application:
-    build: .
-    command: ['make', 'setup']
-    ports:
-      - "8000:8000"
-    working_dir: /app
-    volumes:
-      - ./:/app
-    depends_on:
-      - pgsql
+    nginx:
+        build:
+            context: docker/nginx
+        ports:
+            -   "80:80"
+        volumes:
+            -   ./:/app
+        depends_on:
+            -   php-fpm
 
-  pgsql:
-    image: postgres:14.2-alpine
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: laravel-blog
-    volumes:
-      - blog-data:/var/lib/postgresql/data
+    php-fpm:
+        build:
+            context: docker/php-fpm
+        volumes:
+            -   ./:/app
+
+    application:
+        build: .
+        command: ['make', 'setup']
+        volumes:
+            -   ./:/app
+        depends_on:
+            -   pgsql
+
+    pgsql:
+        image: postgres:14.2-alpine
+        ports:
+            -   "5433:5432"
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: secret
+            POSTGRES_DB: laravel-blog
+        volumes:
+            -   blog-data:/var/lib/postgresql/data
 
 volumes:
   blog-data:

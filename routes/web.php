@@ -7,9 +7,7 @@ use App\Http\Controllers\ArticleLikeController;
 use App\Http\Controllers\AdminManageArticleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();

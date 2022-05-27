@@ -25,6 +25,7 @@
                     <div class="d-flex flex-column align-items-center py-3">
                         <h3>Articles</h3>
                         <h4 class="text-secondary">{{ $user->articles->count() }}</h4>
+                        <a class="btn btn-outline-primary" href="{{ route('articles.index', ['author' => $user->name]) }}">Articles of author</a>
                     </div>
                     <div class="d-flex flex-column align-items-center py-3">
                         <h3>Liked articles</h3>
