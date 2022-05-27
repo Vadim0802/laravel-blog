@@ -56,9 +56,10 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
-        $article->load(['comments', 'author', 'likes', 'tags']);
+        $article->load(['author', 'likes', 'tags']);
+        $comments = $article->comments()->with('user')->latest()->get();
 
-        return view('articles.show', compact('article'));
+        return view('articles.show', compact('article', 'comments'));
     }
 
     public function edit(Article $article)

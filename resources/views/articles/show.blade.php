@@ -53,15 +53,15 @@
         </div>
         <div class="row gap-3 mt-3">
             <h2>Comments</h2>
-            @forelse ($article->comments as $comment)
+            @forelse ($comments as $comment)
                 <div class="col-lg-7">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div>
                                 <img class="rounded-3" src="{{ asset($comment->user->profile_picture) }}" width="40" height="40" alt="comment_author">
                                 <span class="mx-2">
-                                {{ $comment->user->name }}
-                            </span>
+                                    {{ $comment->user->name }}
+                                </span>
                             </div>
                             @canany(['update', 'delete'], $comment)
                                 <div>

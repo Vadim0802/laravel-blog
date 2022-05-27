@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('article_tag', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('article_id');
-            $table->foreignId('tag_id');
+            $table->foreignId('article_id')->constrained();
+            $table->foreignId('tag_id')->constrained();
             $table->timestamps();
 
             $table->unique(['article_id', 'tag_id']);

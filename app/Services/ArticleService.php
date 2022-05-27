@@ -16,6 +16,7 @@ class ArticleService
             'search' => $search,
             'author' => $author
         ];
+
         $articles = $this->getFilteredArticles($filters)
             ->with(['author', 'tags'])
             ->latest()
@@ -35,9 +36,9 @@ class ArticleService
         ];
 
         foreach ($filters as $key => $value) {
-            $filter = new $mappedFilters[$key]();
-            $filter($query, $value);
+            $filter = new ($mappedFilters[$key]);
         }
+            $filter($query, $value);
 
         return $query;
     }
@@ -58,8 +59,7 @@ class ArticleService
         ]);
         $article->author()->associate(auth()->user());
         $article->save();
-
-        $this->attachTagsToArticle($article, $tags);
+        $article->tags()->sync($tags);
 
         return $article;
     }
@@ -72,7 +72,7 @@ class ArticleService
             'slug' => $slug
         ]);
 
-        $this->attachTagsToArticle($article, $tags);
+        $article->tags()->sync($tags);
 
         return $article;
     }
@@ -80,13 +80,5 @@ class ArticleService
     public function deleteArticle(Article $article)
     {
         return $article->delete();
-    }
-
-    private function attachTagsToArticle(Article $article, array $tags)
-    {
-        $article->tags()->detach();
-        foreach ($tags as $tag) {
-            $article->tags()->attach($tag);
-        }
     }
 }
