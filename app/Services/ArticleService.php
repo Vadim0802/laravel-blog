@@ -37,8 +37,8 @@ class ArticleService
 
         foreach ($filters as $key => $value) {
             $filter = new ($mappedFilters[$key]);
-        }
             $filter($query, $value);
+        }
 
         return $query;
     }
